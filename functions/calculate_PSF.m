@@ -32,7 +32,8 @@ function PSF = calculate_PSF(Nk, lambda_0, NA, RI_fluid, RI_imm, z_max, dz, z_de
     f_obj = 1e-3; 
 
     [aberr, T] = model_pupil(Nk, Z_modes, Z_phase, Z_amp); %modelling pupil phase and transmission function from Z_phase/Z_amp
-    
+    T = T /max(T(:)); 
+
     %calculating BFP-fields for all dipole orientations
     PSF = zeros(Nx,Nx,Nz);
     E_tot = zeros(Nz); 

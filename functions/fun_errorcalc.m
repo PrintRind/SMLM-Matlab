@@ -46,6 +46,7 @@ if apo_no==1 %no apodization
 else %polynomial apodization function 
     P= sum(Zernike_stack(:,:,(end-apo_no+1):end).*repmat(coefs_amp,[Nk,Nk,1]),3);
     P(P<=0) = 0;
+    %disp(P);
 end
 D = exp(1i*sum(Zernike_stack(:,:,1:end-apo_no).*repmat(coefs_phase,[Nk,Nk,1]),3));
 conj_kernel=conj(kernel);

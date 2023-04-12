@@ -61,5 +61,8 @@ function [a, iter] = LM_poisson(f, Jac, x, v0, tol, maxiter, lambda, factor)
         end
 
     end
-    %disp(iter)
+    
+    if iter == maxiter
+        disp("max. iterations reached! Fit probably erroneous.")
+    end
 end

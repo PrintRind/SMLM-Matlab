@@ -7,10 +7,11 @@ function [I_molecule, del_idx] = crop_molecule_images(image_stack, preloc_positi
     N_img = size(preloc_positions,1);
     [N_rows, N_cols, N_frames] = size(image_stack);
     I_molecule = zeros(Nx,Nx,N_img); 
-    v = (1:Nx) - mean(1:Nx); %cropping index range
-    
-    x = preloc_positions(:,1)/PSF.ux/1e9;  %column center position in pixel
-    y = preloc_positions(:,2)/PSF.ux/1e9;  %row position in pixel
+    %v = (1:Nx) - mean(1:Nx); %cropping index range
+    v = (1:Nx) - ceil(Nx/2);
+
+    x = preloc_positions(:,1)/PSF.ux/1e9;  %column center position in pixels
+    y = preloc_positions(:,2)/PSF.ux/1e9;  %row position in pixels
     
     idx = 0; 
     del_idx = []; 
@@ -20,13 +21,13 @@ function [I_molecule, del_idx] = crop_molecule_images(image_stack, preloc_positi
         for n = 1:sum(frame_no == m) %loop over molecules in this frame
             idx = idx + 1; 
             
-            row_range =  round(y(idx) + v); 
-            col_range =  round(x(idx) + v); 
+            row_range =  ceil(y(idx) + v); 
+            col_range =  ceil(x(idx) + v); 
             
             if 1<=min(row_range) && N_rows>=max(row_range) && 1<=min(col_range) && N_cols>=max(col_range)
                 I_molecule(:,:,idx) = image(row_range, col_range); 
                 
-            else
+            else %delete molecule if it is too close to the image borders
                 I_molecule(:,:,idx) = 0; 
                 del_idx = [del_idx; idx]; 
             end
