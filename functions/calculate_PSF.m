@@ -13,7 +13,8 @@ function PSF = calculate_PSF(Nk, lambda_0, NA, RI_fluid, RI_imm, z_max, dz, z_de
 %     Z_amp = [1, 0, 0, 0]; 
 %     NA = 1.49;
 %     ux = 100e-9; 
-%     z_defocus = -400e-9;
+%     z_defocus = +400e-9; positive values mean that the objective is moved
+%     towards the sample
 %     dz = 10e-9;     %z-increment of PSF calculation
 %     z_max = 200e-9; %max. z-value (should be within TIRF range)
     %----------------------------
@@ -42,7 +43,7 @@ function PSF = calculate_PSF(Nk, lambda_0, NA, RI_fluid, RI_imm, z_max, dz, z_de
     uk = (2*k0*NA)/Nk; 
     [~,~,Kr,~] = create_coord(Nk,uk,'exact');
     Kz = sqrt(k0^2*RI_imm^2 - Kr.^2); 
-    mask = T .* exp(1i*aberr + 1i*Kz*z_defocus);
+    mask = T .* exp(1i*aberr - 1i*Kz*z_defocus);
     pupil_full = Kr <= k0*NA; 
     pupil_UAF = Kr <= k0*RI_fluid; 
 
